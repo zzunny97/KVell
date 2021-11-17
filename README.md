@@ -4,6 +4,15 @@
 > **_NOTE:_**
 > Switch to the "osdi" branch for the code and README related to "KVell+: Snapshot Isolation Without Snapshots".
 ---
+## Running YCSB benchmark simply above PM
+
+```bash
+sudo mkdir /pmem{}/kvell_zzunny
+sudo chown -R zzunny:zzunny /pmem{}/kvell_zzunny
+# Change $PATH in options.h to /pmem{}/kvell_zzunny
+make -j
+./main {# of PMs} {# of worker threads per PM}
+```
 
 ## Compiling and reproducing results
 
