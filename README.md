@@ -15,7 +15,12 @@ sudo mkdir /pmem{}/kvell_zzunny
 sudo chown -R zzunny:zzunny /pmem{}/kvell_zzunny
 # Change $PATH in options.h to /pmem{}/kvell_zzunny
 make -j
-./main {number of PMs} {number of worker threads per PM}
+./main {number of PMs} {load injector threads ratio} {worker threads ratio} 
+# Note 
+# 1. Sum of two ratios should be 10
+$ 2. Total number of worker threads should be divisible to number of PMs
+# 3. If you want to change the total number of threads that KVell utilizes, modify main.c
+
 ```
 
 ## Compiling and reproducing results
