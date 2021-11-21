@@ -18,7 +18,7 @@ make -j
 ./main {number of PMs} {load injector threads ratio} {worker threads ratio} 
 # Note 
 # 1. Sum of two ratios should be 10
-$ 2. Total number of worker threads should be divisible to number of PMs
+# 2. Total number of worker threads should be divisible to number of PMs
 # 3. If you want to change the total number of threads that KVell utilizes, modify main.c
 
 ```
