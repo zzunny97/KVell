@@ -8,6 +8,7 @@ char *create_unique_item(size_t item_size, uint64_t uid) {
    struct item_metadata *meta = (struct item_metadata *)item;
    meta->key_size = 8;
    meta->value_size = item_size - 8 - sizeof(*meta);
+	 //printf("item_size: %d, key_size: %d, value_size: %d\n", sizeof(*meta), meta->key_size, meta->value_size);
 
    char *item_key = &item[sizeof(*meta)];
    char *item_value = &item[sizeof(*meta) + meta->key_size];

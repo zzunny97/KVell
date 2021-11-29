@@ -14,7 +14,7 @@ rm -f ${mainDir}/eval/*
 
 for li_ratio in {1..9};
 do
-	rm -f /pmem*/kvell_zzunny/*
+	rm -f /pmem*/kvell_zzunny/* # reset DB
 
 	cp ${mainDir}/main.c ${mainDir}/main.c.bak
 	#cat ${mainDir}/main.c | perl -pe 's://.nb_load_injectors = 8:.nb_load_injectors = 8:' | perl -pe 's:[^/].nb_load_injectors = 16: //.nb_load_injectors = 16:' | perl -pe 's:[^/]ycsb_e_uniform,: //ycsb_e_uniform,:' | perl -pe 's://ycsb_a_uniform,:ycsb_a_uniform,:' | perl -pe 's://ycsb_a_zipfian,:ycsb_a_zipfian,:' > ${mainDir}/main.c.tmp
@@ -24,7 +24,7 @@ do
 	
 	worker_ratio=$((10-$li_ratio))
 	echo "Run 1"
-	${tcmalloc} ${mainDir}/main 4 $li_ratio $worker_ratio | tee $evalDir/log_ycsb_FullThread_${li_ratio}:${worker_ratio}_1
+	${tcmalloc} ${mainDir}/main 4 $li_ratio $worker_ratio | tee $evalDir/log_ycsb_Key8byte_Value8byte_FullThread_DRAM30GB_${li_ratio}:${worker_ratio}_1
 
 	#echo "Run 2"
 	#${tcmalloc} ${mainDir}/main 4 $thread_per_pmem | tee $evalDir/log_ycsb_T${thread_per_pmem}_LI8_2
@@ -38,7 +38,7 @@ done
 #
 for li_ratio in {1..9};
 do
-	rm -f /pmem*/kvell_zzunny/* # Change in # workers, reset DB
+	rm -f /pmem*/kvell_zzunny/* # reset DB
 
 	cp ${mainDir}/main.c ${mainDir}/main.c.bak
 	#cat ${mainDir}/main.c | perl -pe 's://.nb_load_injectors = 16:.nb_load_injectors = 16:' | perl -pe 's:[^/].nb_load_injectors = 8: //.nb_load_injectors = 8:' | perl -pe 's://ycsb_e_uniform, y:ycsb_e_uniform, y:' | perl -pe 's:[^/]ycsb_a_uniform,: //ycsb_a_uniform,:' | perl -pe 's:[^/]ycsb_a_zipfian,: //ycsb_a_zipfian,:' > ${mainDir}/main.c.tmp
@@ -48,7 +48,7 @@ do
 
 	worker_ratio=$((10-$li_ratio))
 	echo "Run 1 (scans)"
-	${tcmalloc} ${mainDir}/main 4 $li_ratio $worker_ratio | tee $evalDir/log_ycsb_e_FullThread_${li_ratio}:${worker_ratio}_1
+	${tcmalloc} ${mainDir}/main 4 $li_ratio $worker_ratio | tee $evalDir/log_ycsb_e_Key8byte_Value8byte_FullThread_DRAM30GB_${li_ratio}:${worker_ratio}_1
 
 	#echo "Run 2 (scans)"
 	#${tcmalloc} ${mainDir}/main 4 $thread_per_pmem | tee $evalDir/log_ycsb_e_T${thread_per_pmem}_LI8_2

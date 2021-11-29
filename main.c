@@ -1,18 +1,24 @@
 #include "headers.h"
 
 int main(int argc, char **argv) {
-	int total_core = 80, load_injector_threads, per_disk_worker_threads;
+	// argv[1] : number of PMs
+	// argv[2] : loader injector ratio
+	// argv[3] : worker ratio
+	int total_core = 80;
+	int num_disks = atoi(argv[1]);
 	float load_injector_ratio=atof(argv[2])/10;
 	float worker_ratio = atof(argv[3])/10;
+
 	if(load_injector_ratio + worker_ratio != 1) {
 		fprintf(stderr, "invalid ratio %f %f\n", load_injector_ratio, worker_ratio);
 		exit(-1);
 	}
-	load_injector_threads = load_injector_ratio * total_core;
-	per_disk_worker_threads = worker_ratio * total_core;
+
+	int load_injector_threads = load_injector_ratio * total_core;
+	int total_worker_threads = worker_ratio * total_core;
+	printf("# of disks: %d\n", num_disks);
 	printf("# of load_injector: %d\n", load_injector_threads);
-	printf("# of worker per disk: %d\n", per_disk_worker_threads / atoi(argv[1]));
-	
+	printf("# of worker per disk: %d\n", total_worker_threads / num_disks);
 	
 	int nb_disks, nb_workers_per_disk;
 	declare_timer;
@@ -30,9 +36,8 @@ int main(int argc, char **argv) {
 	/* Parsing of the options */
 	if(argc < 3)
 		die("Usage: ./main <nb disks> <nb workers per disk>\n\tData is stored in %s\n", PATH);
-	nb_disks = atoi(argv[1]);
-	nb_workers_per_disk = per_disk_worker_threads / nb_disks;
-	//nb_workers_per_disk = atoi(argv[2]);
+	nb_disks = num_disks;
+	nb_workers_per_disk = total_worker_threads / num_disks;
 
 	/* Pretty printing useful info */
 	printf("# Configuration:\n");
@@ -62,7 +67,7 @@ int main(int argc, char **argv) {
 	bench_t workload, workloads[] = {
 		ycsb_a_uniform, ycsb_b_uniform, ycsb_c_uniform,
 		ycsb_a_zipfian, ycsb_b_zipfian, ycsb_c_zipfian,
-		//ycsb_e_uniform, ycsb_e_zipfian, // Scans
+	 //ycsb_e_uniform, ycsb_e_zipfian, // Scans
 	};
 	foreach(workload, workloads) {
 		printf("%d\n", workload);
@@ -70,7 +75,6 @@ int main(int argc, char **argv) {
 			w.nb_requests = 2000000LU; // requests for YCSB E are longer (scans) so we do less
 		} else {
 			w.nb_requests = 100000000LU;
-			//w.nb_requests = 100LU; // test
 		}
 		run_workload(&w, workload);
 	}
