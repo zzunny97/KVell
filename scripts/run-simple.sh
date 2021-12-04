@@ -12,8 +12,9 @@ tcmalloc="env LD_PRELOAD=${HOME}/gperftools/.libs/libtcmalloc.so "
 #
 rm -f ${mainDir}/eval/*
 
-for li_ratio in {1..9};
-do
+li_ratio=5
+#for li_ratio in {5};
+#do
 	rm -f /pmem*/kvell_zzunny/* # reset DB
 
 	cp ${mainDir}/main.c ${mainDir}/main.c.bak
@@ -24,20 +25,20 @@ do
 	
 	worker_ratio=$((10-$li_ratio))
 	echo "Run 1"
-	${tcmalloc} ${mainDir}/main 4 $li_ratio $worker_ratio | tee $evalDir/log_ycsb_Key8byte_Value1600byte_FullThread_PC1GB_NoDRAMLimit_${li_ratio}:${worker_ratio}_1
+	${tcmalloc} ${mainDir}/main 4 $li_ratio $worker_ratio | tee $evalDir/log_ycsb_Key8byte_Value8byte_FullThread_PC1GB_DRAM4GB_${li_ratio}:${worker_ratio}_1
 
 	#echo "Run 2"
 	#${tcmalloc} ${mainDir}/main 4 $thread_per_pmem | tee $evalDir/log_ycsb_T${thread_per_pmem}_LI8_2
 
 	mv ${mainDir}/main.c.bak ${mainDir}/main.c
-done
+#done
 
 #
 #Run YCSB E
 #3 workers per disk, 12 load innjectors
 #
-for li_ratio in {1..9};
-do
+#for li_ratio in {5};
+#do
 	rm -f /pmem*/kvell_zzunny/* # reset DB
 
 	cp ${mainDir}/main.c ${mainDir}/main.c.bak
@@ -48,13 +49,13 @@ do
 
 	worker_ratio=$((10-$li_ratio))
 	echo "Run 1 (scans)"
-	${tcmalloc} ${mainDir}/main 4 $li_ratio $worker_ratio | tee $evalDir/log_ycsb_e_Key8byte_Value1600byte_FullThread_PC1GB_NoDRAMLimit_${li_ratio}:${worker_ratio}_1
+	${tcmalloc} ${mainDir}/main 4 $li_ratio $worker_ratio | tee $evalDir/log_ycsb_e_Key8byte_Value8byte_FullThread_PC1GB_DRAM4GB_${li_ratio}:${worker_ratio}_1
 
 	#echo "Run 2 (scans)"
 	#${tcmalloc} ${mainDir}/main 4 $thread_per_pmem | tee $evalDir/log_ycsb_e_T${thread_per_pmem}_LI8_2
 
 	mv ${mainDir}/main.c.bak ${mainDir}/main.c
-done
+#done
 
 #
 #Show results
