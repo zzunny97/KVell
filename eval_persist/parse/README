@@ -1,0 +1,4 @@
+copy data to data dir
+./shortname
+g++ test.cpp
+./a.out [abc/e]
